@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BINA|studio — Online Code Editor</title>
+
+  <!-- Google Fonts: Inter (UI) + Fira Code (mono for editor) -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Basic meta for theme-color -->
+  <meta name="theme-color" content="#0b1220">
+</head>
+<body>
+  <!-- Top navigation -->
+  <header class="topbar" role="banner" aria-label="BINA studio top bar">
+    <div class="brand" tabindex="0">
+      <svg class="brand-logo" width="28" height="28" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <!-- simple B mark -->
+        <rect x="2" y="2" width="20" height="20" rx="4" fill="rgba(255,255,255,0.06)"/>
+        <path d="M6 7h5a3 3 0 0 1 0 6H6V7zm0 8h6a3 3 0 0 0 0-6H6v6z" fill="url(#a)"/>
+        <defs>
+          <linearGradient id="a" x1="0" x2="1">
+            <stop offset="0" stop-color="#8b5cf6"/>
+            <stop offset="1" stop-color="#06b6d4"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <span class="brand-text">BINA<span class="brand-pipe">|</span>studio</span>
+    </div>
+
+    <!-- top actions (useful on mobile to toggle sidebars) -->
+    <div class="top-actions" role="navigation" aria-label="Top Actions">
+      <button id="btn-toggle-sidebar" class="icon-btn" aria-label="Toggle sidebar" title="Toggle sidebar">
+        <!-- hamburger -->
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="app" role="main">
+    <!-- Left sidebar with vertical icons -->
+    <aside class="sidebar" role="navigation" aria-label="Editor sidebar">
+      <nav class="sidebar-icons" role="menu" aria-orientation="vertical">
+        <button class="side-icon active" data-panel="explorer" aria-label="Explorer" title="Explorer" role="menuitem">
+          <!-- explorer icon -->
+          <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h6l2 3h8v7H3z" fill="currentColor"/></svg>
+        </button>
+        <button class="side-icon" data-panel="search" aria-label="Search" title="Search" role="menuitem">
+          <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 21l-4.35-4.35M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>
+        </button>
+        <button class="side-icon" data-panel="extensions" aria-label="Extensions" title="Extensions" role="menuitem">
+          <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 13h4v8H3zM9 3h4v18H9zM15 9h6v12h-6z" fill="currentColor"/></svg>
+        </button>
+        <button class="side-icon" data-panel="settings" aria-label="Settings" title="Settings" role="menuitem">
+          <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5A3.5 3.5 0 1 0 12 8.5a3.5 3.5 0 0 0 0 7zM19.4 15a7.95 7.95 0 0 0 .1-1 7.95 7.95 0 0 0-.1-1l2.1-1.6-2-3.4-2.5 1a8.3 8.3 0 0 0-1.7-1L14.5 2h-5l-.8 2.5c-.6.2-1.1.5-1.7 1L3.7 4 1.7 7.4 3.8 9c-.1.7-.2 1.3-.2 2s.1 1.3.2 2L1.7 15.6 3.7 19l2.5-1a8.3 8.3 0 0 0 1.7 1L9.5 22h5l.8-2.5c.6-.2 1.1-.5 1.7-1l2.5 1 2-3.4z" fill="currentColor"/></svg>
+        </button>
+      </nav>
+
+      <!-- Panels stacked; explorer shown by default -->
+      <div class="sidebar-panels">
+        <section id="panel-explorer" class="panel panel-active" role="region" aria-label="File Explorer">
+          <div class="panel-header">
+            <h3>Explorer</h3>
+            <button id="new-file-btn" class="sm-btn" aria-label="New file">＋ New</button>
+          </div>
+          <div id="file-tree" class="file-tree" role="tree" aria-label="Project files"></div>
+        </section>
+
+        <section id="panel-search" class="panel" role="region" aria-label="Search">
+          <div class="panel-header"><h3>Search</h3></div>
+          <div class="panel-body">
+            <input type="search" class="search-input" placeholder="Search files..." aria-label="Search files" />
+            <p class="muted">Search is small-demo only.</p>
+          </div>
+        </section>
+
+        <section id="panel-extensions" class="panel" role="region" aria-label="Extensions">
+          <div class="panel-header"><h3>Extensions</h3></div>
+          <div class="panel-body">
+            <p class="muted">No extensions installed — lightweight by design.</p>
+          </div>
+        </section>
+
+        <section id="panel-settings" class="panel" role="region" aria-label="Settings">
+          <div class="panel-header"><h3>Settings</h3></div>
+          <div class="panel-body">
+            <label class="row"><input type="checkbox" id="toggle-linewrap" /> <span>Wrap long lines</span></label>
+            <label class="row"><input type="checkbox" id="toggle-gutter" checked /> <span>Show line numbers</span></label>
+          </div>
+        </section>
+      </div>
+    </aside>
+
+    <!-- Main editor column -->
+    <section class="editor-col" aria-label="Editor and files">
+      <!-- File tabs -->
+      <div class="tabs" role="tablist" aria-label="Open files" id="tabs"></div>
+
+      <!-- Editor & preview wrapper -->
+      <div class="editor-area">
+        <!-- Editor gutter: line numbers -->
+        <div class="gutter" id="gutter" aria-hidden="true"></div>
+
+        <!-- Code view: highlighted pre + transparent textarea for input -->
+        <div class="code-wrap" role="application" aria-label="Code editor">
+          <pre class="highlight" id="highlight" aria-hidden="true"><code id="highlight-code" class="language-js"></code></pre>
+          <textarea id="editor" class="editor" spellcheck="false" aria-label="Code editor textarea"></textarea>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Status bar -->
+  <footer class="statusbar" role="contentinfo" aria-label="Editor status bar">
+    <div class="status-left">
+      <span id="status-file" class="muted">No file</span>
+    </div>
+    <div class="status-right">
+      <span id="status-position" aria-live="polite">Ln 1, Col 1</span>
+      <span id="status-mode" class="muted">Plain Text</span>
+    </div>
+  </footer>
+
+  <!-- Script -->
+  <script src="app.js" defer></script>
+</body>
+</html>

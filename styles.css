@@ -1,0 +1,226 @@
+/* styles.css
+   BINA|studio - lightweight, responsive editor UI
+   Design: Glassmorphism-inspired panels with vibrant accents.
+   Comments throughout explain role of blocks and accessibility choices.
+*/
+
+/* Reset / base */
+:root{
+  --bg:#071020;
+  --panel: rgba(255,255,255,0.04);
+  --glass: rgba(255,255,255,0.035);
+  --accent1: #8b5cf6; /* purple */
+  --accent2: #06b6d4; /* teal */
+  --muted: rgba(255,255,255,0.6);
+  --text: #e6eef8;
+  --mono: "Fira Code", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --ui: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  background:
+    radial-gradient(1200px 600px at 10% 10%, rgba(139,92,246,0.10), transparent 8%),
+    radial-gradient(800px 500px at 90% 90%, rgba(6,182,212,0.07), transparent 10%),
+    var(--bg);
+  color:var(--text);
+  font-family:var(--ui);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  display:flex;
+  flex-direction:column;
+  min-height:100vh;
+}
+
+/* Top bar */
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px 14px;
+  backdrop-filter: blur(8px);
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-bottom:1px solid rgba(255,255,255,0.02);
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  cursor:default;
+}
+.brand-logo{filter:drop-shadow(0 4px 18px rgba(11,18,32,0.6))}
+.brand-text{font-weight:600;letter-spacing:0.6px}
+.brand-pipe{color:var(--accent2); margin:0 2px}
+
+/* App layout */
+.app{
+  display:flex;
+  flex:1 1 auto;
+  gap:12px;
+  padding:12px;
+  align-items:stretch;
+}
+
+/* Sidebar */
+.sidebar{
+  width:76px;
+  min-width:64px;
+  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius:12px;
+  padding:10px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 6px 20px rgba(2,6,23,0.6);
+}
+.sidebar-icons{display:flex;flex-direction:column;gap:6px;align-items:center}
+.icon-btn, .side-icon{
+  background:transparent;border:0;padding:10px;border-radius:8px;color:var(--muted);cursor:pointer;
+  display:inline-flex;align-items:center;justify-content:center;
+}
+.side-icon.active, .icon-btn:hover, .side-icon:focus{color:var(--text);background:linear-gradient(90deg, rgba(139,92,246,0.12), rgba(6,182,212,0.06))}
+.side-icon svg{display:block}
+
+/* Sidebar panels container (below icons) */
+.sidebar-panels{flex:1;overflow:auto;padding-top:6px}
+.panel{display:none;padding:6px}
+.panel-active{display:block}
+.panel-header{display:flex;justify-content:space-between;align-items:center;padding:6px 2px}
+.panel-header h3{margin:0;font-size:13px;font-weight:600}
+.sm-btn{background:transparent;border:1px dashed rgba(255,255,255,0.04);padding:6px 8px;border-radius:8px;color:var(--muted);cursor:pointer;font-size:13px}
+
+/* File tree */
+.file-tree{font-family:var(--ui);font-size:13px;line-height:1.4;color:var(--muted)}
+.folder, .file{
+  display:flex;align-items:center;gap:8px;padding:6px;border-radius:6px;cursor:pointer;
+}
+.folder:focus, .file:focus{outline:2px solid rgba(139,92,246,0.16)}
+.folder[aria-expanded="true"] > .folder-label::after{
+  content:"▾";margin-left:auto;opacity:.8;color:var(--accent1)
+}
+.folder[aria-expanded="false"] > .folder-label::after{
+  content:"▸";margin-left:auto;opacity:.7;color:var(--muted)
+}
+.folder-label{display:flex;gap:8px;align-items:center;width:100%}
+
+/* Editor column */
+.editor-col{
+  flex:1 1 auto;
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+  border-radius:12px;
+  overflow:hidden;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  box-shadow: 0 10px 40px rgba(2,6,23,0.6);
+}
+
+/* Tabs */
+.tabs{
+  display:flex;
+  gap:6px;
+  padding:8px;
+  background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-bottom:1px solid rgba(255,255,255,0.02);
+  overflow:auto;
+}
+.tab{
+  padding:8px 12px;border-radius:8px;background:transparent;border:0;color:var(--muted);cursor:pointer;font-family:var(--mono);font-size:13px;
+}
+.tab.active{background:linear-gradient(90deg, rgba(139,92,246,0.12), rgba(6,182,212,0.04));color:var(--text)}
+
+/* Editor area */
+.editor-area{display:flex;flex:1;min-height:0;align-items:stretch}
+.gutter{width:60px;background:linear-gradient(90deg, rgba(255,255,255,0.01), transparent);padding:8px 6px;color:var(--muted);font-family:var(--mono);font-size:12px;overflow:auto}
+.code-wrap{position:relative;flex:1;overflow:auto;padding:12px 16px}
+.highlight, .editor{
+  margin:0;
+  font-family:var(--mono);
+  font-size:13.5px;
+  line-height:1.6;
+  white-space:pre;
+  tab-size:2;
+  min-height:100%;
+}
+
+/* Highlighted code behind the textarea */
+.highlight{
+  color:transparent; /* base hidden; colors applied via spans */
+  pointer-events:none;
+  position:relative;
+  z-index:1;
+  padding:12px;
+  border-radius:8px;
+  overflow:auto;
+  background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
+  border:1px solid rgba(255,255,255,0.02);
+  backdrop-filter: blur(6px);
+}
+
+/* The actual editable area - transparent textarea on top of pre */
+.editor{
+  position:absolute;
+  inset:12px;
+  z-index:2;
+  background:transparent;
+  color:transparent; /* hide default caret text - we style caret via ::selection of highlight spans */
+  caret-color:var(--text);
+  border:0;
+  resize:none;
+  padding:0;
+  margin:0;
+  outline:none;
+  /* ensure the textarea scrolls with the pre */
+  overflow:auto;
+}
+
+/* Colors for tokens - vibrant accent palette */
+.token-comment{ color: #6b7280; font-style:italic } /* muted gray */
+.token-keyword{ color: #ef4444; font-weight:600 } /* red */
+.token-string{ color: #10b981 } /* green */
+.token-number{ color: #f59e0b } /* amber */
+.token-tag{ color: #60a5fa } /* blue */
+.token-attr{ color: #a78bfa } /* purple */
+.token-punct{ color: #94a3b8 }
+
+/* When line wrap is toggled off, preserve whitespace */
+.wrap-off .highlight, .wrap-off .editor { white-space: pre; overflow:auto; }
+.wrap-on .highlight, .wrap-on .editor { white-space: pre-wrap; word-break: break-word; }
+
+/* Status bar */
+.statusbar{
+  height:36px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:6px 12px;
+  font-size:13px;
+  background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
+  border-top:1px solid rgba(255,255,255,0.02);
+  color:var(--muted);
+}
+.status-right{display:flex;gap:14px;align-items:center}
+
+/* Small helpers */
+.muted{color:var(--muted);font-size:13px}
+.row{display:flex;gap:8px;align-items:center;padding:6px 0}
+.search-input{width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.02);background:transparent;color:var(--text)}
+
+/* Responsive layout */
+@media (max-width:900px){
+  .app{padding:8px}
+  .sidebar{position:fixed;left:8px;top:68px;bottom:12px;z-index:40;transform:translateX(-120%);transition:transform .22s ease}
+  .sidebar.open{transform:translateX(0)}
+  .editor-col{margin-left:0}
+  .gutter{display:none}
+  .brand-text{font-size:15px}
+}
+
+/* Accessibility focus states */
+button:focus, .file:focus, .folder:focus, .tab:focus{
+  outline: 3px solid rgba(139,92,246,0.12);
+  outline-offset:2px;
+}
